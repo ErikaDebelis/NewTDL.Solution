@@ -1,0 +1,13 @@
+body {
+  text-align: center;
+}
+
+.done {
+  color: red;
+  font-weight: bold;
+}
+
+.notDone {
+  color: rgb(0, 226, 0);
+  font-weight: bold;
+}
