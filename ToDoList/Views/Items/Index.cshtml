@@ -17,12 +17,12 @@
   @if (item.Status == true)
   {
     <li>@Html.ActionLink($"{item.Description}", "Details", new { id = item.ItemId })<a
-    href="/items/@item.ItemId/statusIncomplete"><span class="done"> X</span></a>
+    href="/items/@item.ItemId/statusIncomplete"><span class="done"> ❌</span></a>
     </li>
   }
   else
   {
-    <li>@Html.ActionLink($"{item.Description}", "Details", new { id = item.ItemId })<a href="/items/@item.ItemId/statusComplete"><span class="notDone"> ✓</span></a>
+    <li>@Html.ActionLink($"{item.Description}", "Details", new { id = item.ItemId })<a href="/items/@item.ItemId/statusComplete"><span class="notDone"> ✔</span></a>
     </li>
 
   }

@@ -18,45 +18,46 @@ namespace ToDoList.Controllers
     }
 
     public ActionResult Index()
-{
-    return View(_db.Items.ToList());
-}
-public ActionResult Create()
-{
-    ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-    return View();
-}
-
-[HttpPost]
-public ActionResult Create(Item item, int CategoryId)
-{
-    _db.Items.Add(item);
-    _db.SaveChanges();
-    if (CategoryId != 0)
     {
-        _db.CategoryItem.Add(new CategoryItem() { CategoryId = CategoryId, ItemId = item.ItemId });
+      return View(_db.Items.ToList());
     }
+    public ActionResult Create()
+    {
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      return View();
+    }
+
+    [HttpPost]
+    public ActionResult Create(Item item, int CategoryId)
+    {
+      _db.Items.Add(item);
+      _db.SaveChanges();
+      if (CategoryId != 0)
+      {
+        _db.CategoryItem.Add(new CategoryItem() { CategoryId = CategoryId, ItemId = item.ItemId });
+      }
     _db.SaveChanges();
     return RedirectToAction("Index");
-}
+    }
 
 
-public ActionResult Details(int id)
-{
+    public ActionResult Details(int id)
+    {
     var thisItem = _db.Items
-        .Include(item => item.JoinEntities)
-        .ThenInclude(join => join.Category)
-        .FirstOrDefault(item => item.ItemId == id);
+      .Include(item => item.JoinEntities)
+      .ThenInclude(join => join.Category)
+      .FirstOrDefault(item => item.ItemId == id);
     return View(thisItem);
-}
-public ActionResult Edit(int id)
-{
-    var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-    ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-    return View(thisItem);
-}
+    }
 
-[HttpPost]
+    public ActionResult Edit(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      return View(thisItem);
+    }
+
+    [HttpPost]
     public ActionResult Edit(Item item, int CategoryId)
     {
       if (CategoryId != 0)
@@ -69,66 +70,64 @@ public ActionResult Edit(int id)
     }
 
     public ActionResult AddCategory(int id)
-{
-    var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-    ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
-    return View(thisItem);
-}
-
-[HttpPost]
-public ActionResult AddCategory(Item item, int CategoryId)
-{
-    if (CategoryId != 0)
     {
-    _db.CategoryItem.Add(new CategoryItem() { CategoryId = CategoryId, ItemId = item.ItemId });
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      ViewBag.CategoryId = new SelectList(_db.Categories, "CategoryId", "Name");
+      return View(thisItem);
     }
+
+    [HttpPost]
+    public ActionResult AddCategory(Item item, int CategoryId)
+    {
+      if (CategoryId != 0)
+      {
+        _db.CategoryItem.Add(new CategoryItem() { CategoryId = CategoryId, ItemId = item.ItemId });
+      }
     _db.SaveChanges();
     return RedirectToAction("Index");
-}
+    }
 
 
-public ActionResult Delete(int id)
-{
-    var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-    return View(thisItem);
-}
+    public ActionResult Delete(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      return View(thisItem);
+    }
 
-[HttpPost, ActionName("Delete")]
-public ActionResult DeleteConfirmed(int id)
-{
-    var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
-    _db.Items.Remove(thisItem);
-    _db.SaveChanges();
-    return RedirectToAction("Index");
-}
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      var thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
+      _db.Items.Remove(thisItem);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
 
-[HttpPost]
-public ActionResult DeleteCategory(int joinId)
-{
-    var joinEntry = _db.CategoryItem.FirstOrDefault(entry => entry.CategoryItemId == joinId);
-    _db.CategoryItem.Remove(joinEntry);
-    _db.SaveChanges();
-    return RedirectToAction("Index");
-}
+    [HttpPost]
+    public ActionResult DeleteCategory(int joinId)
+    {
+      var joinEntry = _db.CategoryItem.FirstOrDefault(entry => entry.CategoryItemId == joinId);
+      _db.CategoryItem.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
 
-[HttpGet("/items/{itemId}/statusComplete")]
-public ActionResult StatusComplete (int itemId)
-{
-    Item item = _db.Items.FirstOrDefault(item => item.ItemId == itemId);
-    item.Status = true;
-    _db.SaveChanges();
+    [HttpGet("/items/{itemId}/statusComplete")]
+    public ActionResult StatusComplete (int itemId)
+    {
+      Item item = _db.Items.FirstOrDefault(item => item.ItemId == itemId);
+      item.Status = true;
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
 
-    return RedirectToAction("Index");
-}
-
-[HttpGet("/items/{itemId}/statusIncomplete")]
-public ActionResult StatusIncomplete (int itemId)
-{
-    Item item = _db.Items.FirstOrDefault(item => item.ItemId == itemId);
-    item.Status = false;
-    _db.SaveChanges();
-
-    return RedirectToAction("Index");
-}
-}
+    [HttpGet("/items/{itemId}/statusIncomplete")]
+    public ActionResult StatusIncomplete (int itemId)
+    {
+      Item item = _db.Items.FirstOrDefault(item => item.ItemId == itemId);
+      item.Status = false;
+      _db.SaveChanges();
+      return RedirectToAction("Index");
+    }
+  }
 }
